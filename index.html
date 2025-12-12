@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReKora - Pekora Scripts</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #000;
+            color: #f1f2f6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header con fondo transparente */
+        header {
+            background-color: transparent;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #333;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #7b2cbf, #9d4edd, #c77dff, #e0aaff, #c77dff, #9d4edd, #7b2cbf);
+            background-size: 400% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientFlow 8s ease infinite;
+            text-shadow: 0 0 15px rgba(157, 78, 221, 0.3);
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: #b0b7c3;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #c77dff;
+            background-color: rgba(157, 78, 221, 0.1);
+        }
+
+        nav a.active {
+            color: #c77dff;
+            background-color: rgba(157, 78, 221, 0.15);
+        }
+
+        /* Páginas */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Grid de 5 columnas */
+        .scripts-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .script-card {
+            background-color: #111;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .script-card:hover {
+            transform: translateY(-8px);
+            border-color: #9d4edd;
+            box-shadow: 0 10px 25px rgba(157, 78, 221, 0.2);
+        }
+
+        .script-header {
+            background-color: #1a1a1a;
+            padding: 20px;
+            border-bottom: 1px solid #222;
+        }
+
+        .script-header h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #f1f2f6;
+            text-align: center;
+        }
+
+        .script-body {
+            padding: 25px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .script-code {
+            background-color: #000;
+            border: 1px solid #333;
+            padding: 18px;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            color: #c77dff;
+            border-left: 4px solid #9d4edd;
+        }
+
+        .copy-btn {
+            background: linear-gradient(to right, #7b2cbf, #9d4edd);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(to right, #5a189a, #7b2cbf);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.3);
+        }
+
+        .copy-btn:active {
+            transform: translateY(0);
+        }
+
+        .copy-btn:disabled {
+            background: #333;
+            color: #777;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .coming-soon {
+            color: #777;
+            font-style: italic;
+            text-align: center;
+        }
+
+        /* Página Games - Centrado */
+        .games-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 60px;
+            min-height: 400px;
+        }
+
+        .game-card {
+            background-color: #111;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #9d4edd;
+            transition: all 0.4s ease;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 0 30px rgba(157, 78, 221, 0.4);
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(157, 78, 221, 0.5);
+        }
+
+        .game-header {
+            background: linear-gradient(to right, #1a1a1a, #2a0a4a);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .game-header h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #f1f2f6;
+            margin-bottom: 15px;
+        }
+
+        .game-featured {
+            color: #9d4edd;
+            font-size: 1rem;
+            font-weight: 700;
+            background-color: rgba(157, 78, 221, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            letter-spacing: 1px;
+        }
+
+        .game-body {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .game-description {
+            color: #b0b7c3;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            font-size: 1.1rem;
+        }
+
+        .play-btn {
+            background: linear-gradient(to right, #7b2cbf, #9d4edd);
+            color: white;
+            border: none;
+            padding: 16px 35px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .play-btn:hover {
+            background: linear-gradient(to right, #5a189a, #7b2cbf);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(157, 78, 221, 0.4);
+        }
+
+        /* Página Developer */
+        .developer-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .dev-card {
+            background-color: #111;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #222;
+        }
+
+        .dev-header {
+            background-color: #1a1a1a;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .dev-header h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #f1f2f6;
+        }
+
+        .dev-body {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .dev-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7b2cbf, #9d4edd);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .dev-name {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #c77dff;
+            margin-bottom: 10px;
+        }
+
+        .dev-role {
+            color: #9d4edd;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .dev-info {
+            padding: 15px 0;
+            border-bottom: 1px solid #222;
+        }
+
+        .dev-info:last-child {
+            border-bottom: none;
+        }
+
+        .info-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            color: #c77dff;
+        }
+
+        .info-desc {
+            color: #b0b7c3;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #111;
+            padding: 25px;
+            text-align: center;
+            border-radius: 12px;
+            border: 1px solid #222;
+            margin-top: 40px;
+        }
+
+        .copyright {
+            font-size: 1.1rem;
+            color: #b0b7c3;
+        }
+
+        .highlight {
+            color: #9d4edd;
+            font-weight: 700;
+        }
+
+        .year {
+            color: #c77dff;
+        }
+
+        /* Notificación */
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: linear-gradient(to right, #7b2cbf, #9d4edd);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            border-left: 4px solid #c77dff;
+        }
+
+        .notification.show {
+            display: flex;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .scripts-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .developer-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .scripts-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .scripts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-card {
+                max-width: 100%;
+            }
+            
+            .game-header h3 {
+                font-size: 1.6rem;
+            }
+            
+            body {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">ReKora</div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-page="requires">Requires</a></li>
+                    <li><a href="#" class="nav-link" data-page="games">Games</a></li>
+                    <li><a href="#" class="nav-link" data-page="developer">Developer</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Página Requires -->
+        <section id="requires" class="page active">
+            <!-- Grid de 5 columnas con los scripts -->
+            <div class="scripts-grid">
+                <!-- Script 1 -->
+                <div class="script-card">
+                    <div class="script-header">
+                        <h3>Suicide Gun</h3>
+                    </div>
+                    <div class="script-body">
+                        <div class="script-code">require(3186658698):executeModule("YourName")</div>
+                        <button class="copy-btn" onclick="copyCode('require(3186658698):executeModule(\"YourName\")')">
+                            <i class="fas fa-copy"></i> Copy Code
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Script 2 -->
+                <div class="script-card">
+                    <div class="script-header">
+                        <h3>Pee</h3>
+                    </div>
+                    <div class="script-body">
+                        <div class="script-code">require(3193063505):executeModule("YourName")</div>
+                        <button class="copy-btn" onclick="copyCode('require(3193063505):executeModule(\"YourName\")')">
+                            <i class="fas fa-copy"></i> Copy Code
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Script 3 -->
+                <div class="script-card">
+                    <div class="script-header">
+                        <h3>Suicide Bomber</h3>
+                    </div>
+                    <div class="script-body">
+                        <div class="script-code">require(18683323231).bombvest("YourName")</div>
+                        <button class="copy-btn" onclick="copyCode('require(18683323231).bombvest(\"YourName\")')">
+                            <i class="fas fa-copy"></i> Copy Code
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Script 4 (próximamente) -->
+                <div class="script-card">
+                    <div class="script-header">
+                        <h3>Script 4</h3>
+                    </div>
+                    <div class="script-body">
+                        <div class="script-code coming-soon">Coming soon...</div>
+                        <button class="copy-btn" disabled>
+                            <i class="fas fa-clock"></i> Coming Soon
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Script 5 (próximamente) -->
+                <div class="script-card">
+                    <div class="script-header">
+                        <h3>Script 5</h3>
+                    </div>
+                    <div class="script-body">
+                        <div class="script-code coming-soon">Coming soon...</div>
+                        <button class="copy-btn" disabled>
+                            <i class="fas fa-clock"></i> Coming Soon
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Página Games - Solo Require Rat Hax -->
+        <section id="games" class="page">
+            <div class="games-container">
+                <div class="game-card">
+                    <div class="game-header">
+                        <h3>Require Rat Hax</h3>
+                        <div class="game-featured">Featured Game</div>
+                    </div>
+                    <div class="game-body">
+                        <p class="game-description">
+                            A Game Where u can execute Requires and test them
+                        </p>
+                        <a href="https://www.pekora.zip/games/364088/Require-Rat-Hax" target="_blank" class="play-btn">
+                            <i class="fas fa-play"></i> Play Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Página Developer -->
+        <section id="developer" class="page">
+            <div class="developer-container">
+                <div class="dev-card">
+                    <div class="dev-header">
+                        <h3>Developer</h3>
+                    </div>
+                    <div class="dev-body">
+                        <div class="dev-avatar">
+                            <i class="fas fa-user-cog"></i>
+                        </div>
+                        <h2 class="dev-name">u10</h2>
+                        <div class="dev-role">Creator of ReKora</div>
+                        <p style="color: #b0b7c3; margin-top: 20px; line-height: 1.6;">
+                            I create Pekora games and also create requires. I help people with their games and scripts.
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="dev-card">
+                    <div class="dev-header">
+                        <h3>Project Information</h3>
+                    </div>
+                    <div class="dev-body">
+                        <div class="dev-info">
+                            <div class="info-title">ReKora Scripts</div>
+                            <div class="info-desc">Platform for sharing Pekora require scripts</div>
+                        </div>
+                        
+                        <div class="dev-info">
+                            <div class="info-title">Creation Date</div>
+                            <div class="info-desc">2025</div>
+                        </div>
+                        
+                        <div class="dev-info">
+                            <div class="info-title">Technologies</div>
+                            <div class="info-desc">HTML5, CSS3, JavaScript, Pekora Lua</div>
+                        </div>
+                        
+                        <div class="dev-info">
+                            <div class="info-title">Objective</div>
+                            <div class="info-desc">Facilitate access to quality scripts for the Pekora community</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="copyright">
+                <p>Copyright © <span class="year">2025</span> - Created by <span class="highlight">u10</span></p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Notificación -->
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>Code copied to clipboard!</span>
+    </div>
+
+    <script>
+        // Navegación entre páginas
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remover clase active de todos los enlaces
+                document.querySelectorAll('.nav-link').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Agregar clase active al enlace clickeado
+                this.classList.add('active');
+                
+                // Ocultar todas las páginas
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.rem
